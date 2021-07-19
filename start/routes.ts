@@ -45,6 +45,8 @@ Route.group(() => {
 
 Route.group(() => {
   Route.post('/new-bet/:gameId', 'BetsController.create')
+  Route.delete('/delete-bet/:betId', 'BetsController.delete')
+  Route.put('/update-bet/:gameId/:betId', 'BetsController.update')
 })
   .middleware('auth')
   .prefix('/bet')

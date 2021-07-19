@@ -48,4 +48,44 @@ export default class BetsController {
 
     return bet
   }
+
+  public async update({ request, response }: HttpContextContract) {
+    const { betId } = request.params()
+    const { gameId } = request.params()
+
+    const bet = await Bet.findByOrFail('id', betId)
+
+    const { choosen_nums }: { choosen_nums: number[] } = request.only(['choosen_nums'])
+
+    const game = await Game.findByOrFail('id', gameId)
+
+    if (choosen_nums.length > game.max_number || choosen_nums.length < game.max_number) {
+      return response
+        .status(400)
+        .json({ error: { menssage: `This game only allows ${game.max_number} numbers choosen` } })
+    }
+
+    choosen_nums.forEach((number) => {
+      if (number > game.range) {
+        return response.status(400).json({
+          error: {
+            mensage: `This game only ranges to ${number} is bigger than the maximum game range (${game.range}), please choose another one`,
+          },
+        })
+      }
+    })
+    const choosen_numbers = choosen_nums.join(',')
+
+    const update = await bet.merge({ choosen_numbers, game_id: gameId, price: game.price })
+
+    return update
+  }
+
+  public async delete({ request }: HttpContextContract) {
+    const { betId } = request.params()
+    const bet = await Bet.findByOrFail('id', betId)
+
+    await bet.delete()
+    return 'sucess'
+  }
 }
