@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import UserPic from 'App/Models/UserPic'
 import Bets from 'App/Models/Bet'
+import Mail from '@ioc:Adonis/Addons/Mail'
 import {
   column,
   beforeSave,
@@ -10,6 +11,8 @@ import {
   HasOne,
   hasMany,
   HasMany,
+  afterCreate,
+  afterSave,
 } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel {
@@ -54,6 +57,35 @@ export default class User extends BaseModel {
   public static async hashPassword(user: User) {
     if (user.$dirty.password) {
       user.password = await Hash.make(user.password)
+    }
+  }
+
+  @afterCreate()
+  public static async sendEmail(user: User) {
+    await Mail.send((message) => {
+      message
+        .from('TGL team')
+        .subject('Welcome to TGL!')
+        .to(user.email)
+        .htmlView('emails/welcome', {
+          name: user.name,
+        })
+    })
+  }
+
+  @afterSave()
+  public static async updateAccount(user: User) {
+    if (user.is_admin === true) {
+      await Mail.send((menssage) => {
+        menssage
+          .from('TGL Team')
+          .subject('Welcome to Admim team!')
+          .to(user.email)
+          .html('emails/WelcomeAdmin'),
+          {
+            name: user.name,
+          }
+      })
     }
   }
 }
