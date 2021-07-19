@@ -10,13 +10,13 @@ export default class Bet extends BaseModel {
   public id: number
 
   @column()
-  public choosen_num: string
+  public choosen_numbers: string
 
   @column()
   public user_id: number
 
   @column()
-  public game_price: number
+  public price: number
 
   @column()
   public game_id: number

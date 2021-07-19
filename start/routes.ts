@@ -27,6 +27,7 @@ Route.group(() => {
   Route.group(() => {
     Route.put('/update', 'UsersController.update')
     Route.delete('/delete', 'UsersController.delete')
+    Route.get('/my-account', 'UsersController.index')
   }).middleware('auth')
 }).prefix('/user')
 
@@ -41,3 +42,9 @@ Route.group(() => {
 })
   .middleware('auth')
   .prefix('/admin')
+
+Route.group(() => {
+  Route.post('/new-bet/:gameId', 'BetsController.create')
+})
+  .middleware('auth')
+  .prefix('/bet')

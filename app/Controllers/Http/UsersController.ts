@@ -29,6 +29,18 @@ export default class UsersController {
     return user
   }
 
+  public async index({ request, auth }: HttpContextContract) {
+    const { id } = await auth.use('api').authenticate()
+
+    const user = await User.findByOrFail('id', id)
+
+    await user.load('bets', (queryUser) => {
+      queryUser.where('id', id)
+    })
+
+    return user
+  }
+
   public async delete({ auth }: HttpContextContract) {
     const { id } = await auth.use('api').authenticate()
 
