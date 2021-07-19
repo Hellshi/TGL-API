@@ -38,6 +38,10 @@ export default class UsersController {
       queryUser
     })
 
+    await user.load('picture', (queryUser) => {
+      queryUser
+    })
+
     return user
   }
 

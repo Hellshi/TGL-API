@@ -20,7 +20,7 @@ export default class User extends BaseModel {
   @hasOne(() => UserPic, {
     foreignKey: 'user_id',
   })
-  public pic: HasOne<typeof UserPic>
+  public picture: HasOne<typeof UserPic>
 
   @hasMany(() => Bets, {
     foreignKey: 'user_id',

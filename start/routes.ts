@@ -50,3 +50,10 @@ Route.group(() => {
 })
   .middleware('auth')
   .prefix('/bet')
+
+Route.group(() => {
+  Route.post('/add-pic', 'UserPicsController.create')
+  Route.get('/:id', 'UserPicsController.show')
+})
+  .middleware('auth')
+  .prefix('/file')
