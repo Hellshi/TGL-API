@@ -43,10 +43,10 @@ export default class User extends BaseModel {
   public name: string
 
   @column()
-  public token: string
+  public token: string | undefined
 
   @column()
-  public token_created_at: DateTime
+  public token_created_at: Date | undefined
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -76,7 +76,7 @@ export default class User extends BaseModel {
 
   @afterSave()
   public static async updateAccount(user: User) {
-    if (user.is_admin === true) {
+    if (user.is_admin) {
       await Mail.send((menssage) => {
         menssage
           .from('TGL Team')
