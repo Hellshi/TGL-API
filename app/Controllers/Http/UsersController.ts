@@ -1,5 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateUser from 'App/Validators/CreateUserValidator'
+import UpdateUser from 'App/Validators/UpdateUserValidator'
 import User from 'App/Models/user'
 
 export default class UsersController {
@@ -12,9 +13,29 @@ export default class UsersController {
     return user
   }
 
-  public async update({ request }: HttpContextContract) {
+  public async update({ request, auth }: HttpContextContract) {
+    const { id } = await auth.use('api').authenticate()
+
+    const user = await User.findByOrFail('id', id)
+
+    await request.validate(UpdateUser)
+
     const data = request.only(['email', 'password', 'name'])
 
-    await request.validate(CreateUser)
+    await user.merge(data)
+
+    await user.save()
+
+    return user
+  }
+
+  public async delete({ auth }: HttpContextContract) {
+    const { id } = await auth.use('api').authenticate()
+
+    const user = await User.findByOrFail('id', id)
+
+    await user.delete()
+
+    return "We'll miss u"
   }
 }

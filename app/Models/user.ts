@@ -13,6 +13,7 @@ import {
   HasMany,
   afterCreate,
   afterSave,
+  beforeDelete,
 } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel {
@@ -87,5 +88,14 @@ export default class User extends BaseModel {
           }
       })
     }
+  }
+
+  @beforeDelete()
+  public static async sendDeleteMail(user: User) {
+    await Mail.send((message) => {
+      message.from('TGL team').subject('Our goodbye').to(user.email).htmlView('emails/good_bye', {
+        name: user.name,
+      })
+    })
   }
 }
