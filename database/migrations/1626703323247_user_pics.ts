@@ -7,6 +7,7 @@ export default class UserPics extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.string('file').notNullable()
+      table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE')
       table.string('name').notNullable()
       table.string('type', 20)
       table.string('subtype', 20)
