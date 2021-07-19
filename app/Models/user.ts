@@ -82,7 +82,7 @@ export default class User extends BaseModel {
           .from('TGL Team')
           .subject('Welcome to Admim team!')
           .to(user.email)
-          .html('emails/WelcomeAdmin'),
+          .htmlView('emails/welcome_admin'),
           {
             name: user.name,
           }
