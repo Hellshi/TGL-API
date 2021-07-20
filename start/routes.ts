@@ -21,6 +21,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.post('/login', 'SessionsController.session')
+Route.get('/all-games', 'GamesController.index')
 
 Route.group(() => {
   Route.post('/create', 'UsersController.create')
@@ -35,13 +36,13 @@ Route.group(() => {
   Route.post('/create-game', 'GamesController.createGame')
   Route.delete('/delete-game/:gameId', 'GamesController.deleteGame')
   Route.put('/update-game/:gameId', 'GamesController.updateGame')
-  Route.get('/all-games', 'GamesController.index')
   Route.put('/promote-user/:id', 'AdminController.promoteUser')
   Route.delete('/delete-user/:id', 'AdminController.deleteUser')
   Route.get('/all-users', 'AdminController.index')
 })
   .middleware('auth')
   .prefix('/admin')
+  .middleware('adminVerify')
 
 Route.group(() => {
   Route.post('/new-bet/:gameId', 'BetsController.create')

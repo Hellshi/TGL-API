@@ -5,11 +5,7 @@ import Mail from '@ioc:Adonis/Addons/Mail'
 import User from 'App/Models/user'
 
 export default class AdminController {
-  public async promoteUser({ request, auth }: HttpContextContract) {
-    const { is_admin } = await auth.use('api').authenticate()
-    if (!is_admin) {
-      return "You're not authorized promote a user to admin, contact our team for more information at: 4008-8922"
-    }
+  public async promoteUser({ request }: HttpContextContract) {
     const { id } = request.params()
 
     const user = await User.findByOrFail('id', id)
@@ -21,11 +17,7 @@ export default class AdminController {
     return user
   }
 
-  public async deleteUser({ request, auth }: HttpContextContract) {
-    const { is_admin } = await auth.use('api').authenticate()
-    if (!is_admin) {
-      return "You're not authorized delete a user, contact our team for more information at: 4008-8922"
-    }
+  public async deleteUser({ request }: HttpContextContract) {
     const { id } = request.params()
 
     const user = await User.findByOrFail('id', id)

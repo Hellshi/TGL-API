@@ -5,11 +5,7 @@ import UpdateValidateGame from 'App/Validators/UpdateGameValidator'
 import Game from 'App/Models/Game'
 
 export default class GamesController {
-  public async createGame({ request, auth }: HttpContextContract) {
-    const { is_admin } = await auth.use('api').authenticate()
-    if (!is_admin) {
-      return "You're not authorized to create games, contact our team to request a game"
-    }
+  public async createGame({ request }: HttpContextContract) {
     const game = request.only([
       'game_type',
       'description',
@@ -25,12 +21,7 @@ export default class GamesController {
     return game
   }
 
-  public async deleteGame({ request, auth }: HttpContextContract) {
-    const { is_admin } = await auth.use('api').authenticate()
-    if (!is_admin) {
-      return "You're not authorized to delete games, contact our team to request a game"
-    }
-
+  public async deleteGame({ request }: HttpContextContract) {
     const { gameId } = request.params()
 
     const game = await Game.findByOrFail('id', gameId)
@@ -40,13 +31,8 @@ export default class GamesController {
     return 'You can create a new game to substitute the last one!'
   }
 
-  public async updateGame({ request, auth }: HttpContextContract) {
+  public async updateGame({ request }: HttpContextContract) {
     const { gameId } = request.params()
-    const { is_admin } = await auth.use('api').authenticate()
-    if (!is_admin) {
-      return "You're not authorized to delete games, contact our team to request a game"
-    }
-
     const updated = request.only([
       'game_type',
       'description',
