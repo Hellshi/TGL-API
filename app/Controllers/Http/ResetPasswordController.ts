@@ -2,10 +2,9 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import moment from 'moment'
 import ResetPassValidator from 'App/Validators/ResetPassValidator'
 import PassValidator from 'App/Validators/PassValidator'
+import ForgotPass from 'App/Mailers/ForgotPass'
 import { uuid } from 'uuidv4'
 import User from 'App/Models/User'
-
-import Mail from '@ioc:Adonis/Addons/Mail'
 
 export default class ResetPasswordsController {
   public async store({ request }: HttpContextContract) {
@@ -19,16 +18,7 @@ export default class ResetPasswordsController {
 
     await user.save()
 
-    await Mail.send((message) => {
-      message
-        .from('Hell la hell')
-        .subject('reset pass')
-        .to(user.email)
-        .htmlView('emails/forgot_pass', {
-          name: user.name,
-          link: `http://127.0.0.1:3333/reset/${user.token}`,
-        })
-    })
+    await new ForgotPass(user).send()
 
     return user
   }

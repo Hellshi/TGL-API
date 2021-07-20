@@ -2,8 +2,8 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Bet from 'App/Models/Bet'
 import Game from 'App/Models/Game'
-import Mail from '@ioc:Adonis/Addons/Mail'
 import User from 'App/Models/user'
+import NewBet from 'App/Mailers/NewBet'
 
 export interface choosen {
   nums: number[]
@@ -17,11 +17,15 @@ export default class BetsController {
     const { id } = await auth.use('api').authenticate()
     const user = await User.findByOrFail('id', id)
 
-    const GameBase = await Game.findByOrFail('id', gameId)
-
     const { games }: { games: choosen[] } = request.only(['games'])
 
     games.forEach((game) => {
+      let GameBase
+      try {
+        GameBase = Game.findByOrFail('id', game.id)
+      } catch (err) {
+        console.log(err)
+      }
       const nums = game.nums
       if (nums.length > GameBase.max_number || nums.length < GameBase.max_number) {
         return response.status(400).json({
@@ -42,7 +46,7 @@ export default class BetsController {
       try {
         Bet.create({
           choosen_numbers,
-          user_id: id,
+          user_id: game.id,
           game_id: gameId,
           price: GameBase.price,
         })
@@ -51,11 +55,7 @@ export default class BetsController {
       }
     })
 
-    await Mail.send((message) => {
-      message.from('TGL team').subject('New Bet!').to(user.email).htmlView('emails/new_bet', {
-        name: user.name,
-      })
-    })
+    await new NewBet(user).send()
 
     return 'success'
   }

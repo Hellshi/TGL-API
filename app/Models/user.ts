@@ -3,6 +3,9 @@ import Hash from '@ioc:Adonis/Core/Hash'
 import UserPic from 'App/Models/UserPic'
 import Bets from 'App/Models/Bet'
 import Mail from '@ioc:Adonis/Addons/Mail'
+import Welcome from 'App/Mailers/Welcome'
+import WelcomeAdmin from 'App/Mailers/WelcomeAdmin'
+import Goodbye from 'App/Mailers/Goodbye'
 import {
   column,
   beforeSave,
@@ -63,39 +66,18 @@ export default class User extends BaseModel {
 
   @afterCreate()
   public static async sendEmail(user: User) {
-    await Mail.send((message) => {
-      message
-        .from('TGL team')
-        .subject('Welcome to TGL!')
-        .to(user.email)
-        .htmlView('emails/welcome', {
-          name: user.name,
-        })
-    })
+    await new Welcome(user).send()
   }
 
   @afterSave()
   public static async updateAccount(user: User) {
     if (user.is_admin) {
-      await Mail.send((menssage) => {
-        menssage
-          .from('TGL Team')
-          .subject('Welcome to Admim team!')
-          .to(user.email)
-          .htmlView('emails/welcome_admin'),
-          {
-            name: user.name,
-          }
-      })
+      await new WelcomeAdmin(user).send()
     }
   }
 
   @beforeDelete()
   public static async sendDeleteMail(user: User) {
-    await Mail.send((message) => {
-      message.from('TGL team').subject('Our goodbye').to(user.email).htmlView('emails/good_bye', {
-        name: user.name,
-      })
-    })
+    await new Goodbye(user).send()
   }
 }

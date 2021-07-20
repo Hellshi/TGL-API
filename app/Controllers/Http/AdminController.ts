@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Mail from '@ioc:Adonis/Addons/Mail'
+import Informational from 'App/Mailers/Informational'
 
 import User from 'App/Models/user'
 
@@ -22,15 +22,7 @@ export default class AdminController {
 
     const user = await User.findByOrFail('id', id)
 
-    await Mail.send((message) => {
-      message
-        .from('TGL team')
-        .subject('Your account has been terminated')
-        .to(user.email)
-        .htmlView('emails/informational', {
-          name: user.name,
-        })
-    })
+    await new Informational(user).send()
 
     await user.delete()
 
