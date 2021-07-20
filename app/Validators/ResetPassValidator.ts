@@ -1,7 +1,7 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class CreateUserValidator {
+export default class ResetPassValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   /*
@@ -24,9 +24,7 @@ export default class CreateUserValidator {
    *    ```
    */
   public schema = schema.create({
-    email: schema.string({ trim: true }, [rules.email()]),
-    password: schema.string(),
-    name: schema.string({ escape: true }),
+    email: schema.string({}, [rules.email()]),
   })
 
   /**
@@ -40,7 +38,5 @@ export default class CreateUserValidator {
    * }
    *
    */
-  public messages = {
-    required: 'The {{ field }} is required to create a new account',
-  }
+  public messages = {}
 }

@@ -1,5 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import moment from 'moment'
+import ResetPassValidator from 'App/Validators/ResetPassValidator'
+import PassValidator from 'App/Validators/PassValidator'
 import { uuid } from 'uuidv4'
 import User from 'App/Models/User'
 
@@ -8,7 +10,7 @@ import Mail from '@ioc:Adonis/Addons/Mail'
 export default class ResetPasswordsController {
   public async store({ request }: HttpContextContract) {
     const { email } = request.all()
-
+    await request.validate(ResetPassValidator)
     const user = await User.findByOrFail('email', email)
 
     user.token = uuid().toString()
@@ -42,6 +44,8 @@ export default class ResetPasswordsController {
     }
 
     const { password } = request.all()
+
+    await request.validate(PassValidator)
 
     user.password = password
     user.token_created_at = undefined
