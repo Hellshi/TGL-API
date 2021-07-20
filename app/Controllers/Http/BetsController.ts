@@ -5,6 +5,11 @@ import Game from 'App/Models/Game'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import User from 'App/Models/user'
 
+export interface choosen {
+  nums: number[]
+  id: number
+}
+
 export default class BetsController {
   public async create({ request, auth, response }: HttpContextContract) {
     const { gameId } = request.params()
@@ -12,41 +17,47 @@ export default class BetsController {
     const { id } = await auth.use('api').authenticate()
     const user = await User.findByOrFail('id', id)
 
-    const game = await Game.findByOrFail('id', gameId)
+    const GameBase = await Game.findByOrFail('id', gameId)
 
-    const { choosen_nums }: { choosen_nums: number[] } = request.only(['choosen_nums'])
+    const { games }: { games: choosen[] } = request.only(['games'])
 
-    if (choosen_nums.length > game.max_number || choosen_nums.length < game.max_number) {
-      return response
-        .status(400)
-        .json({ error: { menssage: `This game only allows ${game.max_number} numbers choosen` } })
-    }
-
-    choosen_nums.forEach((number) => {
-      if (number > game.range) {
+    games.forEach((game) => {
+      const nums = game.nums
+      if (nums.length > GameBase.max_number || nums.length < GameBase.max_number) {
         return response.status(400).json({
-          error: {
-            mensage: `This game only ranges to ${number} is bigger than the maximum game range (${game.range}), please choose another one`,
-          },
+          error: { menssage: `This game only allows ${GameBase.max_number} numbers choosen` },
         })
       }
-    })
-    const choosen_numbers = choosen_nums.join(',')
-    const bet = await Bet.create({
-      choosen_numbers,
-      user_id: id,
-      game_id: gameId,
-      price: game.price,
+
+      nums.forEach((number) => {
+        if (number > GameBase.range) {
+          return response.status(400).json({
+            error: {
+              mensage: `This game only ranges to ${number} is bigger than the maximum game range (${GameBase.range}), please choose another one`,
+            },
+          })
+        }
+      })
+      const choosen_numbers = nums.join(',')
+      try {
+        Bet.create({
+          choosen_numbers,
+          user_id: id,
+          game_id: gameId,
+          price: GameBase.price,
+        })
+      } catch (err) {
+        console.log(err)
+      }
     })
 
     await Mail.send((message) => {
       message.from('TGL team').subject('New Bet!').to(user.email).htmlView('emails/new_bet', {
         name: user.name,
-        numbers: choosen_numbers,
       })
     })
 
-    return bet
+    return 'success'
   }
 
   public async update({ request, response }: HttpContextContract) {
