@@ -19,20 +19,16 @@ export default class BetsController {
 
     const { games }: { games: choosen[] } = request.only(['games'])
 
-    games.forEach((game) => {
-      let GameBase
-      try {
-        GameBase = Game.findByOrFail('id', game.id)
-      } catch (err) {
-        console.log(err)
-      }
+    games.forEach(async (game) => {
+      const GameBase = await Game.findByOrFail('id', game.id)
       const nums = game.nums
       if (nums.length > GameBase.max_number || nums.length < GameBase.max_number) {
         return response.status(400).json({
-          error: { menssage: `This game only allows ${GameBase.max_number} numbers choosen` },
+          error: {
+            menssage: `This ${GameBase.game_type} only allows ${GameBase.max_number} numbers choosen`,
+          },
         })
       }
-
       nums.forEach((number) => {
         if (number > GameBase.range) {
           return response.status(400).json({
@@ -43,10 +39,11 @@ export default class BetsController {
         }
       })
       const choosen_numbers = nums.join(',')
+
       try {
         Bet.create({
           choosen_numbers,
-          user_id: game.id,
+          user_id: id,
           game_id: gameId,
           price: GameBase.price,
         })
