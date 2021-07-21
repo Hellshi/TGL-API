@@ -40,16 +40,12 @@ export default class BetsController {
       })
       const choosen_numbers = nums.join(',')
 
-      try {
-        Bet.create({
-          choosen_numbers,
-          user_id: id,
-          game_id: gameId,
-          price: GameBase.price,
-        })
-      } catch (err) {
-        console.log(err)
-      }
+      await Bet.create({
+        choosen_numbers,
+        user_id: id,
+        game_id: gameId,
+        price: GameBase.price,
+      })
     })
 
     await new NewBet(user).send()
