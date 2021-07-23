@@ -16,9 +16,9 @@ export default class ForgotPass extends BaseMailer {
    */
   // public mailer = this.mail.use()
   public html = mjml(
-    View.renderSync('emails/good_bye', {
+    View.renderSync('emails/forgot_pass', {
       name: this.user.name,
-      link: `http://127.0.0.1:3333/reset/${this.user.token}`,
+      link: `http://localhost:3000/reset/${this.user.token}`,
     })
   ).html
   /**
@@ -29,6 +29,6 @@ export default class ForgotPass extends BaseMailer {
    * also be async.
    */
   public async prepare(message: MessageContract) {
-    message.subject('Account Finished').from('hell@theHell.com').to(this.user.email).html(this.html)
+    message.subject('Forgot Pass').from('hell@theHell.com').to(this.user.email).html(this.html)
   }
 }

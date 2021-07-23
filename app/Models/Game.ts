@@ -1,7 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import Bet from './Bet'
 
 export default class Game extends BaseModel {
+  @hasMany(() => Bet, {
+    foreignKey: 'game_id',
+  })
+  public games: HasMany<typeof Bet>
+
   @column()
   public game_type: string
 

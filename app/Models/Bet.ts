@@ -3,7 +3,9 @@ import { BaseModel, belongsTo, column, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import Game from 'App/Models/Game'
 
 export default class Bet extends BaseModel {
-  @belongsTo(() => Game)
+  @belongsTo(() => Game, {
+    foreignKey: 'game_id',
+  })
   public type: BelongsTo<typeof Game>
 
   @column({ isPrimary: true })

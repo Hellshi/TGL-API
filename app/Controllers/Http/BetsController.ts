@@ -6,14 +6,12 @@ import User from 'App/Models/user'
 import NewBet from 'App/Mailers/NewBet'
 
 export interface choosen {
-  nums: number[]
+  numbers: number[]
   id: number
 }
 
 export default class BetsController {
   public async create({ request, auth, response }: HttpContextContract) {
-    const { gameId } = request.params()
-
     const { id } = await auth.use('api').authenticate()
     const user = await User.findByOrFail('id', id)
 
@@ -21,7 +19,7 @@ export default class BetsController {
 
     games.forEach(async (game) => {
       const GameBase = await Game.findByOrFail('id', game.id)
-      const nums = game.nums
+      const nums = game.numbers
       if (nums.length > GameBase.max_number || nums.length < GameBase.max_number) {
         return response.status(400).json({
           error: {
@@ -43,7 +41,7 @@ export default class BetsController {
       await Bet.create({
         choosen_numbers,
         user_id: id,
-        game_id: gameId,
+        game_id: GameBase.id,
         price: GameBase.price,
       })
     })
@@ -91,5 +89,11 @@ export default class BetsController {
 
     await bet.delete()
     return 'sucess'
+  }
+
+  public async index({ auth }: HttpContextContract) {
+    const { id } = await auth.use('api').authenticate()
+    const bets = await Bet.query().where('user_id', id).preload('type')
+    return bets
   }
 }

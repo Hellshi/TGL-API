@@ -30,7 +30,7 @@ export default class AdminController {
   }
 
   public async index() {
-    const users = User.query().select('*')
+    const users = User.query().select('*').preload('picture').orderBy('is_admin', 'desc')
     return users
   }
 }

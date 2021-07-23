@@ -30,6 +30,7 @@
     "@adonisjs/mail": "^7.2.2",
     "@adonisjs/repl": "^3.0.0",
     "@adonisjs/view": "^6.0.6",
+    "@phc/argon2": "^1.0.9",
     "luxon": "^2.0.1",
     "mjml": "^4.10.1",
     "moment": "^2.29.1",

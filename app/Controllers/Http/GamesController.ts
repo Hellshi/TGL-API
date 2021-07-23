@@ -47,6 +47,7 @@ export default class GamesController {
     const game = await Game.findByOrFail('id', gameId)
 
     await game.merge(updated)
+    await game.save()
 
     return game
   }

@@ -45,9 +45,10 @@ Route.group(() => {
   .middleware('adminVerify')
 
 Route.group(() => {
-  Route.post('/new-bet/:gameId', 'BetsController.create')
+  Route.post('/new-bet/', 'BetsController.create')
   Route.delete('/delete-bet/:betId', 'BetsController.delete')
   Route.put('/update-bet/:gameId/:betId', 'BetsController.update')
+  Route.get('/all-bets', 'BetsController.index')
 })
   .middleware('auth')
   .prefix('/bet')
@@ -57,9 +58,9 @@ Route.group(() => {
   Route.post('/:token', 'ResetPasswordController.update')
 }).prefix('/reset')
 
+Route.get('file/:id', 'UserPicsController.show')
 Route.group(() => {
   Route.post('/add-pic', 'UserPicsController.create')
-  Route.get('/:id', 'UserPicsController.show')
 })
   .middleware('auth')
   .prefix('/file')
