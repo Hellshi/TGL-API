@@ -16,10 +16,7 @@ export default class BetsController {
     const user = await User.findByOrFail('id', id)
 
     const { games }: { games: choosen[] } = request.only(['games'])
-
-    let price: number = 0
-    let prices: number[] = []
-    games.forEach(async (game) => {
+    const prices = games.map(async (game) => {
       const GameBase = await Game.findByOrFail('id', game.id)
       const nums = game.numbers
       if (nums.length > GameBase.max_number || nums.length < GameBase.max_number) {
@@ -29,8 +26,6 @@ export default class BetsController {
           },
         })
       }
-      price += GameBase.price
-      await prices.push(price)
       nums.forEach((number) => {
         if (number > GameBase.range) {
           return response.status(400).json({
@@ -47,10 +42,15 @@ export default class BetsController {
         game_id: GameBase.id,
         price: GameBase.price,
       })
+      return GameBase.price
     })
-    let totalPrice = price
-    console.log(prices)
-    await new NewBet(user, totalPrice).send()
+    const allPrices = await Promise.all(prices)
+    let totalPrice: number =
+      allPrices.reduce((total: number, current: number) => {
+        return total + current
+      }, 0) || 0
+    const price = totalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+    await new NewBet(user, price).send()
 
     return 'success'
   }

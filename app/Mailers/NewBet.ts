@@ -5,7 +5,7 @@ import View from '@ioc:Adonis/Core/View'
 import Bet from 'App/Models/Bet'
 
 export default class NewBet extends BaseMailer {
-  constructor(private user: User, private totalPrice: number) {
+  constructor(private user: User, private totalPrice: string) {
     super()
   }
   /**
