@@ -10,7 +10,7 @@ export default class UsersController {
 
     await request.validate(CreateUser)
 
-    const existentEmail = await User.findByOrFail('email', data.email)
+    const existentEmail = await User.findBy('email', data.email)
 
     if (existentEmail) {
       return response.status(400).json({ error: { message: 'Email alreasy exists' } })
@@ -31,6 +31,9 @@ export default class UsersController {
     await request.validate(UpdateUser)
     const data = request.only(['email', 'password', 'name'])
     const confirmation = request.only(['ConfirmPassword', 'oldPassword'])
+    if (data.email !== user.email) {
+      return response.status(500).json({ error: { message: 'Email does not match' } })
+    }
 
     if (data.password || confirmation.oldPassword || confirmation.ConfirmPassword) {
       const match = await Hash.verify(user.password, confirmation.oldPassword)
