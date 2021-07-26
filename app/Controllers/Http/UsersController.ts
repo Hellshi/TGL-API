@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CreateUser from 'App/Validators/CreateUserValidator'
-import Hash from '@ioc:Adonis/Core/Hash'
 import UpdateUser from 'App/Validators/UpdateUserValidator'
+import validate from 'App/Services/validationUser'
 import User from 'App/Models/user'
 
 export default class UsersController {
@@ -31,24 +31,11 @@ export default class UsersController {
     await request.validate(UpdateUser)
     const data = request.only(['email', 'password', 'name'])
     const confirmation = request.only(['ConfirmPassword', 'oldPassword'])
-    if (data.email !== user.email) {
-      return response.status(500).json({ error: { message: 'Email does not match' } })
-    }
 
-    if (data.password || confirmation.oldPassword || confirmation.ConfirmPassword) {
-      const match = await Hash.verify(user.password, confirmation.oldPassword)
-      if (!match) {
-        return response.status(500).json({ error: { message: 'Opps old pass does not match' } })
-      }
-      if (confirmation.oldPassword && confirmation.ConfirmPassword !== data.password) {
-        return response.status(500).json({ error: { message: ' Confirm password does not match' } })
-      }
-    }
-    if (data.password === '') {
-      data.password = user.password
-    }
-    if (data.name === '') {
-      data.name = user.name
+    const test = await validate(user, data, confirmation)
+
+    if (!test?.sucess) {
+      return response.status(500).json({ error: { message: test?.message } })
     }
 
     await user.merge(data)

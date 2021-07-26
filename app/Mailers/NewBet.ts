@@ -2,9 +2,10 @@ import mjml from 'mjml'
 import { BaseMailer, MessageContract } from '@ioc:Adonis/Addons/Mail'
 import User from 'App/Models/user'
 import View from '@ioc:Adonis/Core/View'
+import Bet from 'App/Models/Bet'
 
 export default class NewBet extends BaseMailer {
-  constructor(private user: User) {
+  constructor(private user: User, private totalPrice: number) {
     super()
   }
   /**
@@ -15,7 +16,9 @@ export default class NewBet extends BaseMailer {
    * options to the send method
    */
   // public mailer = this.mail.use()
-  public html = mjml(View.renderSync('emails/new_bet', { name: this.user.name })).html
+  public html = mjml(
+    View.renderSync('emails/new_bet', { name: this.user.name, price: this.totalPrice })
+  ).html
   /**
    * The prepare method is invoked automatically when you run
    * "Welcome.send".

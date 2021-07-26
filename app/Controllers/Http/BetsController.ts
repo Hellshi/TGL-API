@@ -17,6 +17,8 @@ export default class BetsController {
 
     const { games }: { games: choosen[] } = request.only(['games'])
 
+    let price: number = 0
+    let prices: number[] = []
     games.forEach(async (game) => {
       const GameBase = await Game.findByOrFail('id', game.id)
       const nums = game.numbers
@@ -27,6 +29,8 @@ export default class BetsController {
           },
         })
       }
+      price += GameBase.price
+      await prices.push(price)
       nums.forEach((number) => {
         if (number > GameBase.range) {
           return response.status(400).json({
@@ -37,7 +41,6 @@ export default class BetsController {
         }
       })
       const choosen_numbers = nums.join(',')
-
       await Bet.create({
         choosen_numbers,
         user_id: id,
@@ -45,8 +48,9 @@ export default class BetsController {
         price: GameBase.price,
       })
     })
-
-    await new NewBet(user).send()
+    let totalPrice = price
+    console.log(prices)
+    await new NewBet(user, totalPrice).send()
 
     return 'success'
   }
