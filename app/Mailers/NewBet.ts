@@ -2,7 +2,6 @@ import mjml from 'mjml'
 import { BaseMailer, MessageContract } from '@ioc:Adonis/Addons/Mail'
 import User from 'App/Models/user'
 import View from '@ioc:Adonis/Core/View'
-import Bet from 'App/Models/Bet'
 
 export default class NewBet extends BaseMailer {
   constructor(private user: User, private totalPrice: string) {

@@ -14,16 +14,23 @@ export default class UserPicsController {
     await upload.move(Application.tmpPath('uploads'), {
       name: fileName,
     })
-
-    const file = await UserPic.create({
+    const data = {
       file: fileName,
       name: upload.clientName,
       type: upload.type,
       subtype: upload.subtype,
       user_id: id,
-    })
+    }
 
-    return file
+    const userPic = await UserPic.findBy('user_id', id)
+
+    if (!userPic) {
+      const file = await UserPic.create(data)
+      return file
+    }
+    const update = await userPic.merge(data)
+    await userPic.save()
+    return update
   }
 
   public async show({ request, response }: HttpContextContract) {

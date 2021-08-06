@@ -34,6 +34,6 @@ export default class UserPic extends BaseModel {
 
   @computed()
   public get url() {
-    return `http://127.0.0.1:3333/file/${this.id}`
+    return `http://10.0.0.106:3333/file/${this.id}`
   }
 }
