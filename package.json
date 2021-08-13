@@ -9,6 +9,7 @@
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
     "commit": "git cz",
+    "coverage": "nyc npm run test",
     "test": "node -r @adonisjs/assembler/build/register japaFile.ts"
   },
   "devDependencies": {
@@ -28,6 +29,7 @@
     "get-port": "^5.1.1",
     "japa": "^3.1.1",
     "jsdom": "^16.7.0",
+    "nyc": "^15.1.0",
     "pino-pretty": "^5.1.2",
     "prettier": "^2.3.2",
     "supertest": "^6.1.5",

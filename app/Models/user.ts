@@ -13,9 +13,8 @@ import {
   HasOne,
   hasMany,
   HasMany,
-  afterCreate,
   afterSave,
-  beforeDelete,
+  afterDelete,
   beforeCreate,
 } from '@ioc:Adonis/Lucid/Orm'
 
@@ -57,26 +56,26 @@ export default class User extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @beforeCreate()
+  @beforeSave()
   public static async hashPassword(user: User) {
     if (user.$dirty.password) {
       user.password = await Hash.make(user.password)
     }
   }
 
-  @afterCreate()
+  @beforeCreate()
   public static async sendEmail(user: User) {
     await new Welcome(user).send()
   }
 
-  @afterSave()
+  @beforeCreate()
   public static async updateAccount(user: User) {
     if (user.is_admin) {
       await new WelcomeAdmin(user).send()
     }
   }
 
-  @beforeDelete()
+  @afterDelete()
   public static async sendDeleteMail(user: User) {
     await new Goodbye(user).send()
   }
