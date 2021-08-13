@@ -1,4 +1,4 @@
-import faker, { fake } from 'faker'
+import faker from 'faker'
 import test from 'japa'
 import supertest from 'supertest'
 

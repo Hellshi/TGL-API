@@ -37,5 +37,7 @@ export default class BetValidator {
    * }
    *
    */
-  public messages = {}
+  public messages = {
+    required: 'The {{ field }} is required to make a new bet!',
+  }
 }
