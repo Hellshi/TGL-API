@@ -20,7 +20,7 @@ test.group('Authenticte a user', async () => {
 
     const { user, token } = body
 
-    assert.equal(user.name, User.name)
+    assert.equal(user.email, User.email)
     assert.exists(token)
     assert.isNotEmpty(token)
   })
