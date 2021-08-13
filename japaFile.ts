@@ -34,4 +34,5 @@ configure({
   files: ['__tests__/**/*.spec.ts'],
   before: [runMigrations, startHttpServer],
   after: [rollbackMigrations],
+  timeout: 100000,
 })

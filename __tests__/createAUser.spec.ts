@@ -7,7 +7,6 @@ test.group('Create a user', () => {
     const password = '123456'
 
     const user = await UserFactory.merge({ password: password }).create()
-    //console.log(user)
     assert.ok<User>(user)
-  }).timeout(6000)
+  })
 })
