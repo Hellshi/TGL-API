@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { UserFactory } from 'Database/factories'
 import test from 'japa'
 import supertest from 'supertest'
@@ -20,15 +19,25 @@ test.group('Games CRUD', async () => {
   })
 
   const game = {
-    game_type: 'Type',
-    description: 'A simple game ',
-    range: 20,
-    price: 200,
-    max_number: 5,
+    game_type: 'Mega-Sena',
+    description: 'A description',
+    range: 60,
+    price: 5,
+    max_number: 6,
     color: '#ffff',
     min_cart_value: 2,
   }
-  test('A game is updated when valid data is provided', async (assert) => {
+
+  const numbers: number[] = []
+
+  while (numbers.length < game.max_number) {
+    const randomNumber = Math.floor(Math.random() * game.range)
+
+    if (numbers.indexOf(randomNumber) === -1 && randomNumber > 0) {
+      numbers.push(randomNumber)
+    }
+  }
+  test('A bet is made when valid data is provided', async (assert) => {
     await supertest(BASE_URL)
       .post('/admin/create-game')
       .set('Authorization', `Bearer ${token}`)
@@ -36,27 +45,16 @@ test.group('Games CRUD', async () => {
       .expect(200)
 
     const { body } = await supertest(BASE_URL)
-      .put('/admin/update-game/1')
+      .post('/bet/new-bet/')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        game_type: 'Um joguinho',
+        games: [
+          {
+            numbers: numbers,
+            id: 2,
+          },
+        ],
       })
       .expect(200)
-
-    const { game_type } = body
-    assert.equal(game_type, 'Um joguinho')
-  })
-
-  test('An error is returned when invalid id is provided', async (assert) => {
-    const { body } = await supertest(BASE_URL)
-      .put('/admin/update-game/25')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        game_type: 'Um joguinho',
-      })
-      .expect(404)
-
-    const { message } = body
-    assert.exists(message)
   })
 })

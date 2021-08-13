@@ -21,17 +21,17 @@ export default class GamesController {
     return game
   }
 
-  public async deleteGame({ request }: HttpContextContract) {
+  public async deleteGame({ request, response }: HttpContextContract) {
     const { gameId } = request.params()
 
     const game = await Game.findByOrFail('id', gameId)
 
     await game.delete()
 
-    return 'You can create a new game to substitute the last one!'
+    return response.status(200).send('You can create a new game to substitute the last one!')
   }
 
-  public async updateGame({ request }: HttpContextContract) {
+  public async updateGame({ request, response }: HttpContextContract) {
     const { gameId } = request.params()
     const updated = request.only([
       'game_type',
@@ -49,7 +49,7 @@ export default class GamesController {
     await game.merge(updated)
     await game.save()
 
-    return game
+    return response.status(200).send(game)
   }
 
   public async index() {

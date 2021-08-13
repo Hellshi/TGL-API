@@ -64,15 +64,15 @@ export default class User extends BaseModel {
 
   /*   @afterSave()
   public static async sendEmail(user: User) {
-    await new Welcome(user).send()
-  } */
+    await new Welcome(user).sendLater()
+  }
 
   @afterSave()
   public static async updateAccount(user: User) {
     if (user.is_admin) {
-      await new WelcomeAdmin(user).send()
+      await new WelcomeAdmin(user).sendLater()
     }
-  }
+  } */
 
   @afterDelete()
   public static async sendDeleteMail(user: User) {

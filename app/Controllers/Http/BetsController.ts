@@ -52,7 +52,7 @@ export default class BetsController {
     const price = totalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
     await new NewBet(user, price).send()
 
-    return 'success'
+    return response.status(200).json('sucess')
   }
 
   public async update({ request, response }: HttpContextContract) {

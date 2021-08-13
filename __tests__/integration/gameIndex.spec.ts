@@ -23,6 +23,7 @@ test.group('Games CRUD', async () => {
     const { body } = await supertest(BASE_URL)
       .get('/all-games')
       .set('Authorization', `Bearer ${token}`)
+      .expect(200)
 
     const { game_type } = body[0]
     assert.exists(game_type)
