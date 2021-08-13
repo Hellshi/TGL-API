@@ -4,7 +4,7 @@ import supertest from 'supertest'
 
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 
-test.group('Authenticte a user', async () => {
+test.group('Admin routes', async () => {
   const password = '123456'
 
   const Admin = await UserFactory.merge({ password: password, is_admin: true }).create()

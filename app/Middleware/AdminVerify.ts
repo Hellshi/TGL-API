@@ -17,7 +17,6 @@ export default class AdminVerify {
           ],
         })
     }
-    console.log(is_admin)
     // code for middleware goes here. ABOVE THE NEXT CALL
     await next()
   }

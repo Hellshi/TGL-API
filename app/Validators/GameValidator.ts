@@ -1,4 +1,4 @@
-import { schema } from '@ioc:Adonis/Core/Validator'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class GameValidator {
@@ -24,12 +24,12 @@ export default class GameValidator {
    *    ```
    */
   public schema = schema.create({
-    game_type: schema.string(),
-    description: schema.string(),
+    game_type: schema.string({ trim: true }, [rules.minLength(2)]),
+    description: schema.string({ trim: true }, [rules.minLength(2)]),
     range: schema.number(),
     price: schema.number(),
     max_number: schema.number(),
-    color: schema.string(),
+    color: schema.string({ trim: true }, [rules.minLength(2)]),
     min_cart_value: schema.number(),
   })
 

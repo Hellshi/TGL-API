@@ -62,10 +62,10 @@ export default class User extends BaseModel {
     }
   }
 
-  @afterSave()
+  /*   @afterSave()
   public static async sendEmail(user: User) {
     await new Welcome(user).send()
-  }
+  } */
 
   @afterSave()
   public static async updateAccount(user: User) {
