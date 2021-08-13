@@ -15,7 +15,6 @@ import {
   HasMany,
   afterSave,
   afterDelete,
-  beforeCreate,
 } from '@ioc:Adonis/Lucid/Orm'
 
 export default class User extends BaseModel {
@@ -63,12 +62,12 @@ export default class User extends BaseModel {
     }
   }
 
-  @beforeCreate()
+  @afterSave()
   public static async sendEmail(user: User) {
     await new Welcome(user).send()
   }
 
-  @beforeCreate()
+  @afterSave()
   public static async updateAccount(user: User) {
     if (user.is_admin) {
       await new WelcomeAdmin(user).send()
