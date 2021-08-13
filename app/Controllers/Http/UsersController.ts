@@ -33,7 +33,7 @@ export default class UsersController {
     const confirmation = request.only(['ConfirmPassword', 'oldPassword'])
 
     const test = await validate(user, data, confirmation)
-
+    console.log(test)
     if (!test?.sucess) {
       return response.status(500).json({ error: { message: test?.message } })
     }

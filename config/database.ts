@@ -4,7 +4,7 @@
  * Feel free to let us know via PR, if you find something broken in this config
  * file.
  */
-
+import Application from '@ioc:Adonis/Core/Application'
 import Env from '@ioc:Adonis/Core/Env'
 import { DatabaseConfig } from '@ioc:Adonis/Lucid/Database'
 
@@ -33,6 +33,19 @@ const databaseConfig: DatabaseConfig = {
     | npm i pg
     |
     */
+    sqlite: {
+      client: 'sqlite',
+      connection: {
+        filename: Application.tmpPath('db.sqlite3'),
+      },
+      migrations: {
+        naturalSort: true,
+      },
+      useNullAsDefault: true,
+      healthCheck: false,
+      debug: false,
+    },
+
     pg: {
       client: 'pg',
       connection: {
@@ -48,8 +61,7 @@ const databaseConfig: DatabaseConfig = {
       healthCheck: false,
       debug: false,
     },
-
-  }
+  },
 }
 
 export default databaseConfig

@@ -19,5 +19,6 @@ const validate = async (user, data, confirmation) => {
   if (data.name === '') {
     data.name = user.name
   }
+  return { sucess: true }
 }
 export default validate

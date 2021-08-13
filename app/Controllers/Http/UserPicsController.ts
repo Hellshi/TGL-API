@@ -5,10 +5,10 @@ import UserPic from 'App/Models/UserPic'
 export default class UserPicsController {
   public async create({ request, auth }: HttpContextContract) {
     const { id } = await auth.use('api').authenticate()
+    console.log({ file: request.file('file') })
     if (!request.file('file')) return
 
     const upload = request.file('file', { size: '2mb' })!
-
     const fileName = `${Date.now()}.${upload.subtype}`
 
     await upload.move(Application.tmpPath('uploads'), {
