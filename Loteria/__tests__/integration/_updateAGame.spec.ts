@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import Database from '@ioc:Adonis/Lucid/Database'
 import { UserFactory } from 'Database/factories'
 import test from 'japa'
 import supertest from 'supertest'
+import BASE_URL from '../utils/base'
 
-const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
-
-test.group('Games CRUD', async (group) => {
+test.group('Games CRUD', async () => {
   const password = '123456'
 
   const Admin = await UserFactory.merge({ password: password, is_admin: true }).create()

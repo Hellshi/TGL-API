@@ -4,6 +4,7 @@ import Bet from 'App/Models/Bet'
 import Game from 'App/Models/Game'
 import User from 'App/Models/user'
 import NewBet from 'App/Mailers/NewBet'
+import SendMail from 'App/Services/senMail'
 
 export interface choosen {
   numbers: number[]
@@ -51,6 +52,7 @@ export default class BetsController {
       }, 0) || 0
     const price = totalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
     await new NewBet(user, price).send()
+    SendMail()
 
     return response.status(200).json('sucess')
   }

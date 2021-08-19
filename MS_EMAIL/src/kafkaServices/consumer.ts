@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { Kafka, Consumer as KafkaConsumer } from 'kafkajs';
+import sendMail from '../services/Mail';
 
 interface IConsumer {
   groupId: string
@@ -28,12 +29,8 @@ export default class Consumer {
     console.log(`consuming ${topic}`);
 
     await this.consumer.run({
-      eachMessage: async ({ topic, partition, message }) => {
-        console.log({
-          value: String(message.value),
-          partition,
-          topic,
-        });
+      eachMessage: async ({ message }) => {
+        sendMail(String(message.value));
       },
     });
   }

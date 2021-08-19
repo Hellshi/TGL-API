@@ -1,8 +1,7 @@
 import { UserFactory } from 'Database/factories'
 import test from 'japa'
 import supertest from 'supertest'
-
-const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
+import BASE_URL from '../utils/base'
 
 test.group('Games CRUD', async () => {
   const password = '123456'
@@ -37,14 +36,14 @@ test.group('Games CRUD', async () => {
       numbers.push(randomNumber)
     }
   }
-  test('A bet is made when valid data is provided', async (assert) => {
+  test('A bet is made when valid data is provided', async () => {
     await supertest(BASE_URL)
       .post('/admin/create-game')
       .set('Authorization', `Bearer ${token}`)
       .send(game)
       .expect(200)
 
-    const { body } = await supertest(BASE_URL)
+    await supertest(BASE_URL)
       .post('/bet/new-bet/')
       .set('Authorization', `Bearer ${token}`)
       .send({

@@ -1,8 +1,7 @@
 import { UserFactory } from 'Database/factories'
 import test from 'japa'
 import supertest from 'supertest'
-
-const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
+import BASE_URL from '../utils/base'
 
 test.group('Admin routes', async () => {
   const password = '123456'
