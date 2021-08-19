@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import Database from '@ioc:Adonis/Lucid/Database'
 import { UserFactory } from 'Database/factories'
 import test from 'japa'
 import supertest from 'supertest'
 
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}`
 
-test.group('Games CRUD', async () => {
+test.group('Games CRUD', async (group) => {
   const password = '123456'
 
   const Admin = await UserFactory.merge({ password: password, is_admin: true }).create()
@@ -28,6 +29,7 @@ test.group('Games CRUD', async () => {
     color: '#ffff',
     min_cart_value: 2,
   }
+
   test('A game is updated when valid data is provided', async (assert) => {
     await supertest(BASE_URL)
       .post('/admin/create-game')
@@ -36,7 +38,7 @@ test.group('Games CRUD', async () => {
       .expect(200)
 
     const { body } = await supertest(BASE_URL)
-      .put('/admin/update-game/1')
+      .put('/admin/update-game/5')
       .set('Authorization', `Bearer ${token}`)
       .send({
         game_type: 'Um joguinho',
@@ -49,12 +51,11 @@ test.group('Games CRUD', async () => {
 
   test('An error is returned when invalid id is provided', async (assert) => {
     const { body } = await supertest(BASE_URL)
-      .put('/admin/update-game/25')
+      .put('/admin/update-game/252')
       .set('Authorization', `Bearer ${token}`)
       .send({
         game_type: 'Um joguinho',
       })
-      .expect(404)
 
     const { message } = body
     assert.exists(message)
