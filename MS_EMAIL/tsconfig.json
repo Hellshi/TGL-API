@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+
+    "typeRoots": [
+    "./node-modules/@types/",
+    "./src/@types/"
+    ],
+    "target": "es2017",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+
+  "types": ["jest", "node", "@types/jest", "@types/mocha"],
+  "typeRoots": ["./src/types", "./node_modules/@types"],
+  "exclude": ["node_modules", "**/*.spec.ts"],
+  "include": ["./src/**/*.tsx", "./src/**/*.ts"]
+}

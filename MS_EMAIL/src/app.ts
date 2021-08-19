@@ -1,12 +1,13 @@
 /* eslint-disable import/prefer-default-export */
-import * as express from 'express';
-
-import { router } from './routes';
+import express from 'express';
+import Consumer from './kafkaServices/consumer';
 
 const app = express();
 
 app.use(express.json());
 
-app.use(router);
+const consumer = new Consumer({ groupId: 'email-group' });
+
+consumer.consume({ topic: 'email-handler', fromBeginning: true });
 
 export { app };
