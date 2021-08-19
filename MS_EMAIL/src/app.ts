@@ -1,4 +1,6 @@
-import express from 'express';
+/* eslint-disable import/prefer-default-export */
+import * as express from 'express';
+
 import { router } from './routes';
 
 const app = express();

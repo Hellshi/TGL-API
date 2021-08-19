@@ -38,7 +38,7 @@ test.group('Games CRUD', async (group) => {
       .expect(200)
 
     const { body } = await supertest(BASE_URL)
-      .put('/admin/update-game/5')
+      .put('/admin/update-game/1')
       .set('Authorization', `Bearer ${token}`)
       .send({
         game_type: 'Um joguinho',
