@@ -5,7 +5,7 @@
         "es6": true
     },
     "extends": [
-        "airbnb-base", "airbnb-typescript"
+        "airbnb-base", "plugin:import/typescript"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -16,15 +16,25 @@
         "@typescript-eslint"
     ],
     "rules": {
+
    "import/extensions": [
       "error",
-      "ignorePackages",
+      "always",
       {
         "js": "never",
         "jsx": "never",
         "ts": "never",
         "tsx": "never"
       }
-   ]
-}
+    ],
+   "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"]
+},
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
 }
